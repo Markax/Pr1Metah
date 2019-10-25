@@ -10,18 +10,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-/**
- *
- * @author Xenahort
- *
- * ------- Errores pendientes ------ HAY QUE PONERLE EL RANDOM AL GREEDY
- *
- */
+
 public class Pr1Metah {
 
     static int cubre[];
     static int matriz[][];
     static int x, y;
+    
+    public static final int SEMILLA1 = 77383426;
+    public static final int SEMILLA2 = 77368737;
+    public static final int SEMILLA3 = 34267738;
+    public static final int SEMILLA4 = 87377736;
+    public static final int SEMILLA5 = 34268737;
 
     public static final int SEMILLA1 = 77383426;
     public static final int SEMILLA2 = 77368737;
@@ -130,32 +130,54 @@ public class Pr1Metah {
         Greedy greedy = new Greedy();
         Tabu tabu = new Tabu();
         LocalSearch localSearch = new LocalSearch();
-        Grasp grasp = new Grasp();
-        nuevoGrasp grasp2 = new nuevoGrasp();
 
-        String ficheros[] = {"scpe1.txt", "scp41.txt", "scpd1.txt", "scpnrf1.txt", "scpa1.txt"};
-        int n = 5;
+        String ficheros[] = {"scpe1.txt", "scp41.txt", "scpd1.txt", "scpnrf1.txt", "scpa1.txt"}; 
+        int n = 4;
 
-        for (int i = 0; i < n; i++) {
-            for (int ejecucion = 0; ejecucion < 5; ejecucion++) {
-                leerFichero(ficheros[i]);
-                
-                //GREEDY
-                solGreedy = greedy.greedySearch(x, y, matriz, cubre, pa, ficheros[i], ejecucion);
+        leerFichero(ficheros[4]);
+        int solucion[] = greedy.greedySearch(x, y, matriz, cubre, pa, ficheros[4], 0);
+        Pair pair[] = greedy.copiaVector();
+   
+        for (int i = 1; i < x; i++) {
+            solucion[i] = 1;
+        }
+        
+        int solucionBL[] = localSearch.busquedaLocal(solucion, matriz, y, x, greedy, pair, 77383426);
+        
+        /*
+        int vecino[] = new int[x];
+        int zonas[] = new int[y];
+        int zonasPendientes = 0;
 
-                //BUSQUEDA LOCAL
-                Pair pair[] = greedy.copiaVector();
-                solLocal = localSearch.busquedaLocal(solGreedy, matriz, y, x, pair, 10000, semillas[ejecucion], pa, ficheros[i], ejecucion);
-
-                //TABU
-                
-                //GRASP
-               //  solGrasp = grasp.graspSearch(x, y, matriz, semillas[ejecucion], pa, ficheros[i], ejecucion);
-                solGrasp = grasp2.graspSearch(x, y, matriz, semillas[ejecucion], pa, ficheros[i], ejecucion);
-
+        for (int i = 1; i < x; i++) {
+            vecino[i] = 0;
+            if (i < y) {
+                zonas[i] = 0;
             }
         }
-        pa.insertarEstadisticas();
+
+        //Se rellena el vector de zonas, las posiciones que quedan con 0, son las que faltan por cubrir
+        for (int k = 1; k < x; k++) {
+            for (int j = 1; j < y; j++) {
+                if (matriz[j][k] == 1 && zonas[j] == 0 && solucionBL[k] == 1) {
+                    zonas[j] = 1;
+                    ++zonasPendientes;
+                }
+            }
+        }
+        zonasPendientes = y - zonasPendientes - 1; 
+        System.out.printf("Hay %s zonas sin cubrir \n", zonasPendientes);
+        */
+        int coste = 0;
+        for (int i = 1; i < x; i++){
+            if (solucionBL[i] == 1) {
+                coste += matriz[0][i];
+            }
+        }
+        System.out.printf("Coste total de la busqueda local: %s \n", coste);  
+        tabu.tabuSearch(x, y, matriz, solucion);
+
+
     }
 
 }

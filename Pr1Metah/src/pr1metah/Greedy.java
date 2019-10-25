@@ -12,6 +12,8 @@ import java.util.Random;
  * @author alumno
  */
 public class Greedy {
+    
+    public Pair cubreOrdenado[];
 
     public Pair cubreOrdenado[];
 
@@ -92,6 +94,7 @@ public class Greedy {
                 }
                 if (columnaRedundante) {
                     solucion[quito] = 0;
+                    factorizacion = factorizacion - matriz[0][quito];
                 }
             }
         }
@@ -129,6 +132,7 @@ public class Greedy {
             buscarMayorRatio(x, y, ratio, cubre, solucion, mat);
             rellenarRatio(x, mat, cubre, ratio);
         }
+
         eliminaRedundancias(x, y, solucion, mat);
         
         time_end = System.currentTimeMillis();
@@ -137,6 +141,10 @@ public class Greedy {
 
         pa.insertaDatos(fich, coste, (int)( time_end - time_start ), ej, 1);
         return solucion;
+    }
+    
+    public Pair[] copiaVector() {
+        return cubreOrdenado;
     }
 
     public Pair[] copiaVector() {
