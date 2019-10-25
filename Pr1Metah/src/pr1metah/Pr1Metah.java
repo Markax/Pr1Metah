@@ -10,20 +10,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-/**
- *
- * @author Xenahort
- *
- * ------- Errores pendientes ------
- * 
- *
- */
+
 public class Pr1Metah {
 
     static int cubre[];
     static int matriz[][];
     static int x, y;
     
+    public static final int SEMILLA1 = 77383426;
+    public static final int SEMILLA2 = 77368737;
+    public static final int SEMILLA3 = 34267738;
+    public static final int SEMILLA4 = 87377736;
+    public static final int SEMILLA5 = 34268737;
+
     public static final int SEMILLA1 = 77383426;
     public static final int SEMILLA2 = 77368737;
     public static final int SEMILLA3 = 34267738;
@@ -43,7 +42,7 @@ public class Pr1Metah {
             br = new BufferedReader(fr);
             String texto;
             String[] datos;
-            System.out.print("Fichero abierto correctamente\n");
+            //System.out.print("Fichero abierto correctamente\n");
             texto = br.readLine();
             datos = texto.split(" ");
             y = Integer.parseInt(datos[1]) + 1;
@@ -90,16 +89,43 @@ public class Pr1Metah {
             try {
                 if (null != fr) {
                     fr.close();
-                    System.out.print("Fichero cerrado correctamente\n");
+                    //System.out.print("Fichero cerrado correctamente\n");
                 }
             } catch (Exception e2) {
             }
         }
     }
 
-    public static void main(String[] args) throws FicheroNoEncontrado {
+    public static int calculaCoste(int x, int sol[], int mat[][]) {
+        int coste = 0;
+        for (int i = 1; i < x; i++) {
+            if (sol[i] == 1) {
+                coste += mat[0][i];
+            }
+        }
+        return coste;
+    }
+
+    public static void solucionesConsola(int fich, int x, int solGreedy[], int solLocal[], int solGrasp[], int mat[][]) {
+        System.out.println("------------------------");
+        System.out.println("      FICHERO Nº" + fich);
+        System.out.println("------------------------");
+        System.out.println("Coste greedy:   " + calculaCoste(x, solGreedy, mat));
+        System.out.println("Coste B. Local: " + calculaCoste(x, solLocal, mat));
+        System.out.println("Coste grasp:    " + calculaCoste(x, solGrasp, mat));
+    }
+
+    public static void main(String[] args) throws FicheroNoEncontrado, InterruptedException {
         Panel pa = new Panel();
         pa.setVisible(true);
+
+        int solGreedy[], solLocal[], solTabu[], solGrasp[];
+        int semillas[] = new int[5];
+        semillas[0] = SEMILLA1;
+        semillas[1] = SEMILLA2;
+        semillas[2] = SEMILLA3;
+        semillas[3] = SEMILLA4;
+        semillas[4] = SEMILLA5;
 
         Greedy greedy = new Greedy();
         Tabu tabu = new Tabu();
@@ -150,6 +176,7 @@ public class Pr1Metah {
         }
         System.out.printf("Coste total de la busqueda local: %s \n", coste);  
         tabu.tabuSearch(x, y, matriz, solucion);
+
 
     }
 
