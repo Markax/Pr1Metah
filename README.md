@@ -1,4 +1,6 @@
-# Pr1Metah
-Practica 1 de metaheuristica
+# Práctica 1 de metaheuristica
 
-Ésta es la práctica 1 de Metaheuristica de la UJA
+Práctica 1 de Metaheuristica de la UJA en la que se han implementado los algoritmos:
+* Greedy
+* Búsqueda Local
+* Búsqueda tabú
